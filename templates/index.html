@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Face Recognition Dashboard</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="logo">Face Detection & Recognition</div>
+
+  <ul class="nav-menu">
+
+    <!-- Face Recognition Dropdown -->
+    <li class="dropdown">
+      <span class="dropdown-toggle">
+        Face Recognition <span class="arrow">▼</span>
+      </span>
+
+      <ul class="dropdown-menu">
+        <li onclick="showSection('add')">Add User</li>
+        <li onclick="showSection('recognize')">Recognize</li>
+      </ul>
+    </li>
+    <li class="nav-item" onclick="showSection('deduction')">
+      Face Detection
+    </li>
+
+  </ul>
+</nav>
+
+
+
+<!-- MAIN CONTAINER -->
+<div class="container">
+
+  <!-- ADD USER -->
+  <section id="add" class="card active">
+    <h2>Add New User</h2>
+    <input type="text" id="userName" placeholder="Enter name">
+    <div class="video-container waiting" id="videoBox">
+      <video id="addVideo" class="camera-off" autoplay muted playsinline></video>
+      <div class="video-overlay">
+        Ready to capture<br>
+        <b>Start Capture</b>
+      </div>
+    </div>
+    <button onclick="startAddUser()">Start Capture</button>
+    <p id="addStatus"></p>
+    
+    <!-- Rebuild embeddings button (shown after 20+ images) -->
+    <button id="finalizeBtn" onclick="rebuildEmbeddings()" style="display: none;">
+      Finalize User & Train Model
+    </button>
+    <p id="trainStatus"></p>
+  </section>
+
+  <!-- RECOGNITION -->
+  <section id="recognize" class="card">
+    <h2>Face Recognition</h2>
+    <!-- Live camera preview -->
+    <div class="video-container waiting" id="videoRecBox">
+      <video id="videoRec" class="camera-off" muted playsinline></video>
+      <div class="video-overlay">
+        Ready to recognize<br>
+        <b>Recognize</b>
+      </div>
+    </div>
+    
+    <button onclick="runRecognition()">Recognize</button>
+    
+    <p id="result"></p>
+    
+    <!-- Annotated result -->
+    <img id="outputImg" />
+  </section>
+
+  <!--Face Deduction-->
+  <section id="deduction" class="card">
+    <h2>Face Detection</h2>
+  
+    <div class="video-container waiting">
+      <video id="videoDetect" class="camera-off" muted playsinline></video>
+      <div class="video-overlay">
+        Ready to detect<br>
+        <b>Detection</b>
+      </div>
+    </div>
+  
+    <button onclick="runDeduction()">Detect</button>
+  
+    <p id="detectResult"></p>
+    <img id="detectOutputImg" />
+  </section>
+  
+</div>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>
