@@ -49,14 +49,14 @@ static/uploads/*
 # model/*.weights.h5
 # !model/.gitkeep
 
-# Data files (large)
-data/embeddings_facenet.pkl
-data/faces.pkl
-data/names.pkl
-data/users/*
-!data/users/.gitkeep
-data/Attendance/*.csv
-!data/Attendance/.gitkeep
+# Data files (large) - commented out to allow pushing structure
+# data/embeddings_facenet.pkl
+# data/faces.pkl
+# data/names.pkl
+# data/users/*
+# !data/users/.gitkeep
+# data/Attendance/*.csv
+# !data/Attendance/.gitkeep
 
 # Detection results
 static/results/*.jpg

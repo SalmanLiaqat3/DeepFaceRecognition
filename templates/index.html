@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="/static/image/Favicon1.png" type="image/x-icon">
   <title>Face Recognition Dashboard</title>
   <link rel="stylesheet" href="/static/css/style.css">
 </head>
@@ -10,10 +11,16 @@
 
 <!-- NAVBAR -->
 <nav class="navbar">
-  <div class="logo">Face Detection & Recognition</div>
+  <div class="logo">
+   <img src="/static/image/logo.webp" alt="Logo">DFD&R
+  </div>
 
+  <!-- Desktop Navigation -->
   <ul class="nav-menu">
-
+    <li class="nav-item" onclick="showSection('home')">Home</li>
+    <li class="nav-item" onclick="showSection('deduction')">
+      Face Detection
+    </li>
     <!-- Face Recognition Dropdown -->
     <li class="dropdown">
       <span class="dropdown-toggle">
@@ -25,10 +32,21 @@
         <li onclick="showSection('recognize')">Recognize</li>
       </ul>
     </li>
-    <li class="nav-item" onclick="showSection('deduction')">
-      Face Detection
-    </li>
+  </ul>
 
+  <!-- Mobile Hamburger Button -->
+  <button class="hamburger-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+    <span class="hamburger-line"></span>
+  </button>
+
+  <!-- Mobile Navigation Menu -->
+  <ul class="mobile-nav-menu" id="mobileNavMenu">
+    <li class="mobile-nav-item" onclick="showSection('home'); closeMobileMenu();">Home</li>
+    <li class="mobile-nav-item" onclick="showSection('deduction'); closeMobileMenu();">Face Detection</li>
+    <li class="mobile-nav-item" onclick="showSection('add'); closeMobileMenu();">Add User</li>
+    <li class="mobile-nav-item" onclick="showSection('recognize'); closeMobileMenu();">Recognition / Attendance</li>
   </ul>
 </nav>
 
@@ -37,8 +55,95 @@
 <!-- MAIN CONTAINER -->
 <div class="container">
 
+  <!-- HOME PAGE -->
+  <section id="home" class="card active home-section">
+    <div class="home-wrapper">
+      <!-- Hero Section -->
+      <div class="hero-section">
+        <div class="hero-content">
+          <h1 class="hero-title">
+            <span class="title-line-1">Secure Face Recognition & Detection</span>
+            <span class="title-line-2">Made Simple</span>
+          </h1>
+          <p class="hero-description">
+            Face Detection & Recognition System provides enterprise-grade face detection and recognition tools 
+            in a simple, intuitive interface. Detect, identify, and manage attendance with confidence.
+          </p>
+          <div class="hero-buttons">
+            <button onclick="showSection('recognize')" class="btn-primary">
+              Face Recognition
+              <span class="btn-arrow">→</span>
+            </button>
+            <button onclick="showSection('add')" class="btn-secondary">Add New User</button>
+            <button onclick="showSection('deduction')" class="btn-secondary">FaceDetection</button>
+          </div>
+          <div class="hero-benefits">
+            <div class="benefit-item">
+              <span class="check-icon">✓</span>
+              <span>No installation required</span>
+            </div>
+            <div class="benefit-item">
+              <span class="check-icon">✓</span>
+              <span>Real-time processing</span>
+            </div>
+            <div class="benefit-item">
+              <span class="check-icon">✓</span>
+              <span>Automatic attendance</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Features Section -->
+      <div class="features-section">
+        <div class="features-header">
+          <h2 class="features-title">Everything you need for face detection & recognition</h2>
+          <p class="features-subtitle">
+            Powerful features designed for face Detection and  modern security and attendance management systems
+          </p>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            <h3 class="feature-card-title">Advanced Detection</h3>
+            <p class="feature-card-description">
+              Deep learning models for accurate real-time face detection with high precision and reliability.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon purple">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+            </div>
+            <h3 class="feature-card-title">Lightning Fast</h3>
+            <p class="feature-card-description">
+              Optimized performance with minimal latency for seamless real-time recognition operations.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon green">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+            </div>
+            <h3 class="feature-card-title">Secure & Reliable</h3>
+            <p class="feature-card-description">
+              Enterprise-grade security with encrypted facial data and automated attendance logging.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ADD USER -->
-  <section id="add" class="card active">
+  <section id="add" class="card">
     <h2>Add New User</h2>
     <input type="text" id="userName" placeholder="Enter name">
     <div class="video-container waiting" id="videoBox">
@@ -97,6 +202,40 @@
   </section>
   
 </div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-column footer-left">
+      <div class="footer-logo">
+        <div class="footer-logo-icon">👤</div>
+        <span class="footer-logo-text">Face Recognition System</span>
+      </div>
+      <p class="footer-description">
+        Secure face detection and automated attendance management system. 
+        Enterprise-grade security with an intuitive interface.
+      </p>
+    </div>
+    <div class="footer-column footer-middle">
+      <h4 class="footer-column-title">PRODUCT</h4>
+      <nav class="footer-nav">
+        <a href="#" onclick="showSection('add'); return false;" class="footer-link">Add User</a>
+        <a href="#" onclick="showSection('recognize'); return false;" class="footer-link">Recognize</a>
+      </nav>
+    </div>
+    <div class="footer-column footer-right">
+      <h4 class="footer-column-title">SYSTEM</h4>
+      <nav class="footer-nav">
+        <a href="#" onclick="showSection('home'); return false;" class="footer-link">Home</a>
+        <a href="#" onclick="showSection('deduction'); return false;" class="footer-link">Detection</a>
+      </nav>
+    </div>
+  </div>
+  <div class="footer-separator"></div>
+  <div class="footer-bottom">
+    <p>&copy; 2025 Face Detection & Recognition System. All rights reserved.</p>
+  </div>
+</footer>
 
 <script src="/static/js/app.js"></script>
 </body>

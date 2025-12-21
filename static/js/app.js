@@ -4,8 +4,262 @@ function showSection(id) {
     section.classList.remove('active');
   });
 
-  document.getElementById(id).classList.add('active');
+  const targetSection = document.getElementById(id);
+  if (targetSection) {
+    targetSection.classList.add('active');
+    // Update URL hash without scrolling
+    if (history.pushState) {
+      history.pushState(null, null, '#' + id);
+    }
+    
+    // Smooth scroll to the top of the target section
+    setTimeout(() => {
+      scrollToSectionTop(targetSection);
+    }, 50); // Small delay to ensure DOM is updated
+  }
 }
+
+/* Smooth scroll to the top of a section */
+function scrollToSectionTop(element) {
+  if (!element) return;
+  
+  // Get navbar height for offset
+  const navbar = document.querySelector('.navbar');
+  const navbarHeight = navbar ? navbar.offsetHeight : 0;
+  
+  // Get the container element that holds the sections
+  const container = element.closest('.container') || document.querySelector('.container');
+  
+  if (container) {
+    // Get container's position relative to document
+    const containerRect = container.getBoundingClientRect();
+    const containerTop = containerRect.top + window.pageYOffset;
+    
+    // Calculate target position: container top - navbar offset
+    // Add a small padding (10px) for better visual spacing
+    const targetPosition = containerTop - navbarHeight - 10;
+    
+    // Smooth scroll to target
+    window.scrollTo({
+      top: Math.max(0, targetPosition), // Ensure we don't scroll to negative position
+      behavior: 'smooth'
+    });
+  } else {
+    // Fallback: scroll to element itself
+    scrollToElementTop(element);
+  }
+}
+
+/* MOBILE MENU TOGGLE */
+function toggleMobileMenu() {
+  const mobileMenu = document.getElementById('mobileNavMenu');
+  const hamburgerBtn = document.querySelector('.hamburger-btn');
+  
+  if (mobileMenu && hamburgerBtn) {
+    mobileMenu.classList.toggle('active');
+    hamburgerBtn.classList.toggle('active');
+  }
+}
+
+function closeMobileMenu() {
+  const mobileMenu = document.getElementById('mobileNavMenu');
+  const hamburgerBtn = document.querySelector('.hamburger-btn');
+  
+  if (mobileMenu && hamburgerBtn) {
+    mobileMenu.classList.remove('active');
+    hamburgerBtn.classList.remove('active');
+  }
+}
+
+/* Close mobile menu when clicking outside */
+document.addEventListener('click', function(event) {
+  const mobileMenu = document.getElementById('mobileNavMenu');
+  const hamburgerBtn = document.querySelector('.hamburger-btn');
+  const navbar = document.querySelector('.navbar');
+  
+  if (mobileMenu && hamburgerBtn && navbar) {
+    const isClickInsideNav = navbar.contains(event.target);
+    const isMenuOpen = mobileMenu.classList.contains('active');
+    
+    if (isMenuOpen && !isClickInsideNav) {
+      closeMobileMenu();
+    }
+  }
+});
+
+/* Close mobile menu when window is resized to desktop size */
+window.addEventListener('resize', function() {
+  if (window.innerWidth > 768) {
+    closeMobileMenu();
+  }
+});
+
+/* ==================== SMOOTH SCROLLING ==================== */
+
+/* Enable smooth scrolling for all anchor links and buttons */
+document.addEventListener('DOMContentLoaded', function() {
+  // Get all anchor links on the page
+  const anchorLinks = document.querySelectorAll('a[href^="#"]');
+  
+  anchorLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+      
+      // Skip if href is just "#" or empty
+      if (href === '#' || href === '') {
+        return;
+      }
+      
+      const targetId = href.substring(1); // Remove the #
+      const targetElement = document.getElementById(targetId);
+      
+      if (targetElement) {
+        e.preventDefault();
+        
+        // If it's a section (card), use showSection which handles scrolling
+        if (targetElement.classList.contains('card')) {
+          showSection(targetId);
+        } else {
+          // For other elements, scroll to top of the element
+          scrollToElementTop(targetElement);
+        }
+      }
+    });
+  });
+  
+  // Handle buttons with onclick that call showSection
+  const sectionButtons = document.querySelectorAll('button[onclick*="showSection"], .nav-item[onclick*="showSection"]');
+  sectionButtons.forEach(button => {
+    // Remove existing onclick and add event listener
+    const onclickAttr = button.getAttribute('onclick');
+    if (onclickAttr && onclickAttr.includes('showSection')) {
+      button.removeAttribute('onclick');
+      button.addEventListener('click', function(e) {
+        // Extract section ID from the onclick string
+        const match = onclickAttr.match(/showSection\(['"]([^'"]+)['"]\)/);
+        if (match && match[1]) {
+          e.preventDefault();
+          showSection(match[1]);
+        }
+      });
+    }
+  });
+});
+
+/* Smooth scroll to the top of any element */
+function scrollToElementTop(element) {
+  if (!element) return;
+  
+  // Get navbar height for offset
+  const navbar = document.querySelector('.navbar');
+  const navbarHeight = navbar ? navbar.offsetHeight : 0;
+  
+  // Get element's position relative to document
+  const elementTop = element.getBoundingClientRect().top + window.pageYOffset;
+  
+  // Calculate target position with navbar offset
+  const targetPosition = elementTop - navbarHeight;
+  
+  // Smooth scroll to target
+  window.scrollTo({
+    top: Math.max(0, targetPosition), // Ensure we don't scroll to negative position
+    behavior: 'smooth'
+  });
+}
+
+/* Smooth scrolling for programmatic scrolls */
+function smoothScrollTo(element, offset = 0) {
+  if (typeof element === 'string') {
+    element = document.getElementById(element);
+  }
+  
+  if (element) {
+    // If it's a section card, use scrollToSectionTop
+    if (element.classList.contains('card')) {
+      scrollToSectionTop(element);
+    } else {
+      const navbar = document.querySelector('.navbar');
+      const navbarHeight = navbar ? navbar.offsetHeight : 0;
+      const targetPosition = element.getBoundingClientRect().top + window.pageYOffset - navbarHeight - offset;
+      
+      window.scrollTo({
+        top: Math.max(0, targetPosition),
+        behavior: 'smooth'
+      });
+    }
+  }
+}
+
+/* Smooth scroll to top function */
+function smoothScrollToTop() {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}
+
+/* Smooth scroll to bottom function */
+function smoothScrollToBottom() {
+  window.scrollTo({
+    top: document.documentElement.scrollHeight,
+    behavior: 'smooth'
+  });
+}
+
+/* Override default scroll behavior for better compatibility */
+if ('scrollBehavior' in document.documentElement.style === false) {
+  // Fallback for browsers that don't support smooth scroll
+  const originalScrollTo = window.scrollTo;
+  window.scrollTo = function(options) {
+    if (options && options.behavior === 'smooth') {
+      const start = window.pageYOffset;
+      const target = options.top || 0;
+      const distance = target - start;
+      const duration = 500; // milliseconds
+      let startTime = null;
+      
+      function animation(currentTime) {
+        if (startTime === null) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const progress = Math.min(timeElapsed / duration, 1);
+        
+        // Easing function (ease-in-out)
+        const ease = progress < 0.5
+          ? 2 * progress * progress
+          : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+        
+        window.scrollTo(0, start + distance * ease);
+        
+        if (timeElapsed < duration) {
+          requestAnimationFrame(animation);
+        }
+      }
+      
+      requestAnimationFrame(animation);
+    } else {
+      originalScrollTo.apply(this, arguments);
+    }
+  };
+}
+
+/* Handle hash navigation on page load */
+window.addEventListener('DOMContentLoaded', function() {
+  const hash = window.location.hash.substring(1); // Remove the #
+  if (hash && ['home', 'add', 'recognize', 'deduction'].includes(hash)) {
+    showSection(hash);
+  } else {
+    // Default to home if no hash
+    showSection('home');
+  }
+});
+
+/* Handle hash changes */
+window.addEventListener('hashchange', function() {
+  const hash = window.location.hash.substring(1);
+  if (hash && ['home', 'add', 'recognize', 'deduction'].includes(hash)) {
+    showSection(hash);
+  }
+});
 
 /* ---------------- ADD USER AUTO-CAPTURE ---------------- */
 let addStream = null;
