@@ -1,6 +1,6 @@
 flask
 numpy
-opencv-python
+opencv-python-headless
 keras-facenet
 tensorflow
 scikit-learn
